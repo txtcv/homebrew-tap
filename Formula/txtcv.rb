@@ -12,6 +12,6 @@ class Txtcv < Formula
   end
 
   test do
-    assert_match /^txtcv /, shell_output("#{bin}/txtcv --version")
+    assert_match(/^txtcv/, shell_output("#{bin}/txtcv --version"))
   end
 end

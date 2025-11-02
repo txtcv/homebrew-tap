@@ -1,8 +1,8 @@
 class Txtcv < Formula
   desc "Command-line interface for txtcv"
   homepage "https://github.com/txtcv/cli"
-  url "https://github.com/txtcv/cli/archive/refs/tags/v0.1.0.tar.gz"
-  sha256 "6ef67bc69778588d9b6751768c505d565fdbe92b15023bea26e3ef1d57a5a456"
+  url "https://github.com/txtcv/cli/archive/refs/tags/v0.2.0.tar.gz"
+  sha256 "c5ece85f6ad9a97543879c6ce04eae898c8aa350be4798bf89e563eadf347e9b"
   license "MIT"
 
   depends_on "rust" => :build

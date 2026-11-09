@@ -1,18 +1,47 @@
-# txtcv
+# txtcv Homebrew tap
 
-## How do I install these formulae?
+Installs the Go CLI from [txtcv/txtcv](https://github.com/txtcv/txtcv).
 
-`brew install txtcv/tap/txtcv`
+Until the Go CLI has a tagged release, the formula builds the current `main`
+branch from source. Homebrew installs Go as a build dependency.
 
-Or `brew tap txtcv/tap` and then `brew install txtcv`.
+## Install
+
+```sh
+brew install --HEAD txtcv/tap/txtcv
+```
+
+Update to the latest commit:
+
+```sh
+brew update
+brew upgrade --fetch-HEAD txtcv/tap/txtcv
+```
 
 Or, in a `brew bundle` `Brewfile`:
 
 ```ruby
 tap "txtcv/tap"
-brew "txtcv"
+brew "txtcv", args: ["HEAD"]
 ```
 
-## Documentation
+## Try it
 
-`brew help`, `man brew` or check [Homebrew's documentation](https://docs.brew.sh).
+```sh
+mkdir my-cv
+cd my-cv
+txtcv init
+txtcv validate
+txtcv serve
+```
+
+Open http://localhost:9090 to preview the CV and save a PDF using your browser's
+Print dialog. See the [CLI documentation](https://github.com/txtcv/txtcv#readme)
+for more details.
+
+## Maintaining the tap
+
+CI builds and tests the HEAD formula on Linux and Intel/Apple Silicon macOS.
+HEAD installations build from source; the tap does not publish bottles for them.
+Once the Go CLI has a tagged release, add its source archive URL and SHA-256
+checksum to the formula to enable installation without `--HEAD`.

@@ -1,17 +1,21 @@
 class Txtcv < Formula
-  desc "Command-line interface for txtcv"
-  homepage "https://github.com/txtcv/cli"
-  url "https://github.com/txtcv/cli/archive/refs/tags/v0.4.0.tar.gz"
-  sha256 "9c908ce04fb314c52a1e680e741d1c40638a037891b570700dea8f0ab74cf6f0"
-  license "MIT"
+  desc "Plaintext CV builder for software developers"
+  homepage "https://github.com/txtcv/txtcv"
+  head "https://github.com/txtcv/txtcv.git", branch: "main"
 
-  depends_on "rust" => :build
+  depends_on "go" => :build
 
   def install
-    system "cargo", "install", *std_cargo_args
+    ENV["CGO_ENABLED"] = "0"
+    system "go", "build", *std_go_args, "."
   end
 
   test do
-    assert_match(/^txtcv/, shell_output("#{bin}/txtcv --version"))
+    system bin/"txtcv", "init"
+    assert_path_exists testpath/"cv.yaml"
+    assert_match "cv.yaml is valid JSON Resume.", shell_output("#{bin}/txtcv validate")
+
+    (testpath/"invalid.json").write('{"basics":"invalid"}')
+    assert_match "error:", shell_output("#{bin}/txtcv validate invalid.json 2>&1", 1)
   end
 end

@@ -1,40 +1,36 @@
-name: brew test-bot
+name: Homebrew
 
 on:
   push:
     branches:
       - main
   pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
 
 jobs:
-  test-bot:
+  test:
     strategy:
+      fail-fast: false
       matrix:
         os: [ubuntu-22.04, macos-15-intel, macos-26]
     runs-on: ${{ matrix.os }}
-    permissions:
-      actions: read
-      checks: read
-      contents: read
-      pull-requests: read
     steps:
+      - uses: actions/checkout@v4
+
       - name: Set up Homebrew
-        id: set-up-homebrew
         uses: Homebrew/actions/setup-homebrew@main
-        with:
-          token: ${{ secrets.GITHUB_TOKEN }}
 
-      - run: brew test-bot --only-cleanup-before
+      - name: Use the checked-out tap
+        run: brew tap --custom-remote txtcv/tap "$GITHUB_WORKSPACE"
 
-      - run: brew test-bot --only-setup
+      - name: Check formula style
+        run: brew style txtcv/tap
 
-      - run: brew test-bot --only-tap-syntax
-      - run: brew test-bot --only-formulae
-        if: github.event_name == 'pull_request'
+      - name: Build and install the CLI
+        run: brew install --HEAD txtcv/tap/txtcv
 
-      - name: Upload bottles as artifact
-        if: always() && github.event_name == 'pull_request'
-        uses: actions/upload-artifact@v4
-        with:
-          name: bottles_${{ matrix.os }}
-          path: "*.bottle.*"
+      - name: Test the installed CLI
+        run: brew test txtcv/tap/txtcv

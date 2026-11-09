@@ -41,7 +41,7 @@ for more details.
 
 ## Maintaining the tap
 
-CI builds and tests the HEAD formula on Linux and Intel/Apple Silicon macOS.
+CI builds and tests the HEAD formula on the latest Linux and Apple Silicon macOS runners.
 HEAD installations build from source; the tap does not publish bottles for them.
 Once the Go CLI has a tagged release, add its source archive URL and SHA-256
 checksum to the formula to enable installation without `--HEAD`.
